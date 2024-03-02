@@ -1,0 +1,103 @@
+Nodeman :
+-----------------
+
+Nodeman bir kütüphanedir . yazdığımız kodu her seferinde terminalden yenilemememize gerek kalmadan 
+çalışmasına olanak sağlar.
+
+
+Middleware :
+-------------------
+
+(ara yazılım nedir ve nasıl yapılır?)
+middleware, istek ve yanıt nesneleri arasında işlenen işlevlerdir.
+
+ Bir Express uygulaması, bir dizi middleware işlevini birbirine bağlar ve her istek geldiğinde bu işlevler sırayla çalıştırılır.
+
+Middleware işlevleri, istekin işlenmesi veya yanıtın oluşturulması sırasında herhangi bir adımda araya girebilirler. Bu, isteği ön işlemek, isteği işlemek veya yanıtı sonuçlandırmak için kullanılabilir. Örneğin, isteğin geldiği tüm rotalarda belirli bir işlemi gerçekleştirmek istiyorsanız, bunu middleware kullanarak yapabilirsiniz.
+
+Express middleware işlevleri, üç argüman alır: req (istek nesnesi), res (yanıt nesnesi) ve next (sonraki middleware işlevini çağırmak için bir işlev). Middleware işlevi, işlev içinde next() çağrılmadan önce işlemi tamamlarsa, istek işlem zincirinin geri kalanı çalıştırılmaz.
+const express = require('express');
+const app = express();
+
+
+// Middleware
+app.use((req, res, next) => {
+    console.log('İstek alındı:', req.method, req.url);
+    next(); // Sonraki middleware'e devret
+});
+
+// Rota
+app.get('/', (req, res) => {
+    res.send('Ana sayfa');
+});
+
+// Sunucuyu dinle
+app.listen(3000, () => {
+    console.log('Sunucu çalışıyor...');
+});
+
+
+Routing :
+-------------------
+
+
+
+Express.js'de routing, bir web uygulamasında gelen isteklerin belirli yollarla (routes) nasıl işleneceğini belirlemeye yönelik bir kavramdır. Yani istemcinin (tarayıcı, mobil uygulama vs.) sunucuya gönderdiği isteklerin, hangi kod bloklarının bu isteklere cevap vereceğini belirlemek için kullanılır.
+
+Express.js'de routing yapısı, HTTP metodları (GET, POST, PUT, DELETE vb.) ve URL yolları üzerine kuruludur. Her bir yönlendirme, bir HTTP metodu ve bir URL yolunun birleşimidir
+
+app.get('/users', function(req, res) {
+    // Kullanıcıları getirme işlemi
+    res.send('Kullanıcılar getirildi');
+});
+
+app.use("/blogs/:blogid/users/:username", function (req, res) {
+  console.log(req.params.blogid);
+  console.log(req.params.username);
+  res.send("Blog detay sayfası");
+});
+
+
+
+
+HTML sayfalarının Getirilmesi : 
+--------------------------------------
+
+Express.js kullanarak HTML sayfalarını getirmek genellikle bir view motoru veya template engine kullanılarak yapılır. Bu, dinamik içerik oluşturmayı ve sunmayı sağlar. En yaygın kullanılan view motorları arasında EJS (Embedded JavaScript), Pug (eski adıyla Jade), Handlebars ve Mustache bulunur
+
+
+
+const express = require("express");
+
+const app = express();
+
+const path = require("path");
+
+app.use("/blogs/:blogid", function (req, res) {
+  console.log(__dirname);
+  console.log(__filename);
+
+  res.sendFile(path.join(__dirname, "views/users", "blog-details.html"));
+});
+app.use("/blogs", function (req, res) {
+  res.sendFile(path.join(__dirname, "views/users", "blogs.html"));
+});
+
+app.use("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "views/users", "index.html"));
+});
+
+app.listen(3000, function () {
+  console.log("listening on port 3000");
+});
+
+
+
+Static Files : 
+-----------------------------
+
+
+app.use(express.static("node_modules")); diyerek eklediğimiz css yada ekstra files burada dışarıya açık halae yani local de erişilebilir hale getirdik.
+
+app.use("/libs", express.static(path.join(__dirname, "node_modules")));
+app.use("/static", express.static(path.join(__dirname, "public")));
