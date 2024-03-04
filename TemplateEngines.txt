@@ -1,0 +1,38 @@
+Template Engine.js Nedir ?
+--------------------------
+Node.js'deki Template Engine, sunucu tarafında HTML içeriği dinamik olarak oluşturmak için kullanılan bir araçtır. HTML sayfalarının içine değişkenleri, koşullu ifadeleri, döngüleri ve diğer dinamik içerikleri eklemek için kullanılır. Bu sayede sunucu tarafındaki verileri temel alarak istemciye (genellikle bir web tarayıcısı) özelleştirilmiş içerikler sunabilirsiniz.
+
+Node.js'de en popüler Template Engine'lerden bazıları şunlardır:
+
+EJS (Embedded JavaScript): JavaScript kodunu HTML içine yerleştirmek için kullanılır. Bu sayede JavaScript dilini kullanarak dinamik içerikler oluşturabilirsiniz.
+
+Handlebars.js: Handlebars, veri ve şablonları birleştirmek için kullanılır. Basit ve okunabilir bir yapıya sahiptir ve genellikle sunucu tarafında veriye dayalı HTML oluşturmak için kullanılır.
+
+Pug (eski adıyla Jade): Pug, HTML yerine indentasyon ve etiketler arasındaki ilişkiyi kullanır. Bu sayede daha temiz ve daha az kod yazmanızı sağlar.
+
+Mustache.js: Basit ve minimalist bir yapıya sahip olan Mustache, veri ve şablonları birleştirmek için kullanılır. Çok çeşitli programlama dillerinde kullanılabilen bir standarttır.
+
+
+Sayfaya Dinamik Veri Gönderme ? 
+-------------------------------
+
+const express = require('express');
+const app = express();
+const ejs = require('ejs');
+
+// ejs'yi kullanacağımızı belirtmek için Express'e view engine olarak ayarlıyoruz.
+app.set('view engine', 'ejs');
+
+// Örnek bir route tanımlayalım ve dinamik veriyi gönderelim.
+app.get('/', (req, res) => {
+    const data = {
+        pageTitle: 'Ana Sayfa',
+        message: 'Merhaba, dünya!'
+    };
+    res.render('index', data);
+});
+
+app.listen(3000, () => {
+    console.log('Uygulama http://localhost:3000 adresinde çalışıyor.');
+});
+
